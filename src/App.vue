@@ -3,7 +3,7 @@
 
         <v-toolbar dark class="primary">
             <v-app-bar-nav-icon
-                    @click.native.stop="sideNav = !sideNav"
+                    @click.stop="sideNav = !sideNav"
                     class="hidden-sm-and-up">
             </v-app-bar-nav-icon>
             <v-toolbar-title>
@@ -15,7 +15,6 @@
                         text
                         v-for="item in menuItem"
                         :key="item.title"
-                        router
                         :to="item.link">
                     <v-icon dark left>{{ item.icon }}</v-icon>
                     {{ item.title }}
@@ -28,7 +27,6 @@
                 <v-list-item
                         v-for="item in menuItem"
                         :key="item.title"
-                        router
                         :to="item.link">
                     <v-list-item-action>
                         <v-icon>{{ item.icon }}</v-icon>
