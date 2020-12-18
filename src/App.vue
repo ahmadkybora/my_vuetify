@@ -48,13 +48,25 @@
         data() {
             return {
                 sideNav: false,
-                menuItem: [
-                    {icon: 'supervisor_account', title: 'view Meetups', link: '/meetups'},
-                    {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
-                    {icon: 'person', title: 'profile', link: '/profile'},
+            }
+        },
+        computed: {
+            menuItems() {
+                let menuItems = [
                     {icon: 'face', title: 'Sign up', link: '/signup'},
                     {icon: 'lock_open', title: 'Sign in', link: '/signin'},
-                ]
+                ];
+                if(this.userIsAthenticated()) {
+                    menuItems = [
+                        {icon: 'supervisor_account', title: 'view Meetups', link: '/meetups'},
+                        {icon: 'room', title: 'Organize Meetup', link: '/meetup/new'},
+                        {icon: 'person', title: 'profile', link: '/profile'},
+                    ];
+                }
+                return menuItems;
+            },
+            userIsAthenticated () {
+                return this.$store.getters.user !== null && this.$store.getters.user !== undefined
             }
         }
     };

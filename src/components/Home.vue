@@ -34,14 +34,9 @@
 <script>
     export default {
         name: "Home",
-        data() {
-            return {
-                meetups: [
-                    {imageUrl: '/1', id: '/1', title: '/1'},
-                    {imageUrl: '/2', id: '/2', title: '/2'},
-                    {imageUrl: '/3', id: '/3', title: '/3'},
-                    {imageUrl: '/4', id: '/4', title: '/4'},
-                ]
+        computed: {
+            meetups() {
+                return this.$store.getters.featuredMeetups;
             }
         },
         methods: {
