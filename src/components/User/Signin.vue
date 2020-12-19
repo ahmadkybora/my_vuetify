@@ -1,6 +1,11 @@
 <template>
     <v-container>
-        <v-layer>
+        <v-layout row v-if="error">
+            <v-flex xs12 sm6 offset-sm3>
+                <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
+            </v-flex>
+        </v-layout>
+        <v-layout>
             <v-flex xs12 sm6 offset-sm3>
                 <v-card>
                     <v-card-text>
@@ -36,7 +41,14 @@
                                 <v-layout row>
                                     <v-flex xs12>
                                         <v-btn
-                                                type="submit">SigIn</v-btn>
+                                                type="submit"
+                                                :disabled="loading"
+                                                :loading="loading">
+                                            SignIn
+                                            <span slot="loading" class="custom-loader">
+                                                <v-icon light>cached</v-icon>
+                                            </span>
+                                        </v-btn>
                                     </v-flex>
                                 </v-layout>
 
@@ -45,7 +57,7 @@
                     </v-card-text>
                 </v-card>
             </v-flex>
-        </v-layer>
+        </v-layout>
     </v-container>
 </template>
 
@@ -53,7 +65,7 @@
     export default {
         name: "Signin",
         data() {
-            return{
+            return {
                 email: '',
                 password: '',
             }
@@ -61,11 +73,17 @@
         computed: {
             user() {
                 return this.$store.getters.user
+            },
+            error() {
+                return this.$store.getters.error;
+            },
+            loading() {
+                return this.$store.getters.loading;
             }
         },
         watch: {
-            user(value){
-                if(value !== null && value !== undefined){
+            user(value) {
+                if (value !== null && value !== undefined) {
                     this.$router.push('/');
                 }
             }
@@ -73,6 +91,9 @@
         methods: {
             onSignin() {
                 return this.$store.dispatch('signUserin', {email: this.email, password: this.password});
+            },
+            onDismissed() {
+                return this.$store.dispatch('clearError');
             }
         }
     }

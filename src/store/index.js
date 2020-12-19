@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios';
-import {BASE_URL} from "../../vue.config";
+//import {BASE_URL} from "../../vue.config";
 
 Vue.use(Vuex);
 
@@ -17,6 +17,7 @@ export default new Vuex.Store({
         user: null,
         loading: false,
         error: null,
+        BASE_URL: "http://localhost:8000/api",
     },
     mutations: {
         createMeetup(state, payload) {
@@ -53,10 +54,9 @@ export default new Vuex.Store({
                 email: payload.email,
                 password: payload.password,
             };
-            axios.post(BASE_URL + '/', signUp)
+            axios.post(this.state.BASE_URL + '/', signUp)
                 .then(user => {
                     commit('setLoading', false);
-                    commit('setError', error);
                     const newUser = {
                         id: user.uid,
                         registeredMeetups: []
@@ -75,10 +75,9 @@ export default new Vuex.Store({
                 email: payload.email,
                 password: payload.password,
             };
-            axios.post(BASE_URL + '/', signIn)
+            axios.post(this.state.BASE_URL + '/', signIn)
                 .then(user => {
                     commit('setLoading', false);
-                    commit('setError', error);
                     const newUser = {
                         id: user.uid,
                         registeredMeetups: []
@@ -91,6 +90,9 @@ export default new Vuex.Store({
                         commit('setError', error);
                         console.log(error);
                     });
+        },
+        clearError({commit}) {
+            commit('clearError')
         }
     },
     modules: {},
@@ -112,6 +114,12 @@ export default new Vuex.Store({
         },
         user(state) {
             return state.user;
+        },
+        loading(state) {
+            return state.loading;
+        },
+        error(state) {
+            return state.error;
         }
     }
 })
