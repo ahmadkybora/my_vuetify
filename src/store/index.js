@@ -20,6 +20,9 @@ export default new Vuex.Store({
         BASE_URL: "http://localhost:8000/api",
     },
     mutations: {
+        setLoadedMeetups(state, payload) {
+            state.loadedMeetups = payload;
+        },
         createMeetup(state, payload) {
             state.loadedMeetups.push(payload)
         },
@@ -37,16 +40,57 @@ export default new Vuex.Store({
         }
     },
     actions: {
-        createMeetup({commit}, payload) {
+        /**
+         * get method dont need payload
+         *
+         * @param commit
+         * @returns {Promise<any>}
+         */
+        loadMeetup({commit}) {
+            commit('setLoading', true);
+            return new Promise((resolve, reject) => {
+                axios.get(this.$store.BASE_URL + '/employee')
+                    .then(() => {
+                        const meetups = [];
+                        commit('setLoadedMeetups', meetups);
+                        commit('setLoading', false);
+                        resolve();
+                    })
+                    .catch(() => {
+                        reject();
+                    })
+            })
+        },
+        createMeetup({commit}, getters, payload) {
             const meetup = {
                 id: '212',
                 title: payload.title,
                 location: payload.location,
-                imageUrl: payload.imageUrl,
                 description: payload.description,
-                date: payload.date,
+                date: payload.date.toISOString(),
+                creatorId: getters.user.id,
             };
-            commit('createMeetup', meetup)
+            return new Promise((resolve, reject) =>{
+                let imageUrl;
+                let key;
+                axios.post(this.$store.BASE_URL + '', meetup)
+                    .then(res => {
+                        const key = res.data.data;
+                        return key;
+                    })
+                    .then(key => {
+                       const filename = payload.image.name;
+                       const ext = filename.slice(filename.lastIndexOf('.'));
+                    })
+                    .then(fileData => {
+                        imageUrl = fileData.metadata.downloadURLs[0];
+                        resolve();
+                    })
+                    .catch(() => {
+                        reject();
+                    });
+                commit('createMeetup', meetup)
+            });
         },
         signUserUp({commit}, payload) {
             commit('setLoading', true);
@@ -90,6 +134,12 @@ export default new Vuex.Store({
                         commit('setError', error);
                         console.log(error);
                     });
+        },
+        autoSignIn({commit}, payload) {
+            commit('setUser', {id: payload.uid, registeredMeetups: []})
+        },
+        logout({commit}) {
+            commit('setUser')
         },
         clearError({commit}) {
             commit('clearError')

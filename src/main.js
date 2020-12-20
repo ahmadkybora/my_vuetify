@@ -7,10 +7,12 @@ import Vuetify from './plugins/vuetify';
 //import '../node_modules/@mdi/font/css/materialdesignicons.min.css';
 import Datefilter from './filters/date';
 import Alert from './components/Shared/Alert';
+import EditMeetupDetailsDialog from './components/Meetup/Edit/EditMeetupDetailsDialog';
 
 Vue.config.productionTip = false;
 Vue.filter('date', Datefilter);
 Vue.component('app-alert', Alert);
+Vue.component('app-edit-meetup-details-dialog', EditMeetupDetailsDialog);
 Vue.use(Vuetify);
 
 export default new Vuetify({

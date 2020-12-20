@@ -11,6 +11,15 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-xs-only">
+
+                <v-btn
+                       text
+                       v-if="userIsAthenticated"
+                       @click="onLogout()">
+                    <v-icon dark left>exit_to_app</v-icon>
+                    Logout
+                </v-btn>
+
                 <v-btn
                         text
                         v-for="item in menuItems"
@@ -19,6 +28,7 @@
                     <v-icon dark left>{{ item.icon }}</v-icon>
                     {{ item.title }}
                 </v-btn>
+
             </v-toolbar-items>
         </v-toolbar>
 
@@ -33,6 +43,14 @@
                     </v-list-item-action>
                     <v-list-item-content>{{ item.title }}</v-list-item-content>
                 </v-list-item>
+
+                <v-list-item v-if="userIsAthenticated" @click="onLogout()">
+                    <v-list-item-action>
+                        <v-icon>exit_to_app</v-icon>
+                    </v-list-item-action>
+                    <v-list-item-content>Logout</v-list-item-content>
+                </v-list-item>
+
             </v-list>
         </v-navigation-drawer>
 
@@ -67,6 +85,11 @@
             },
             userIsAthenticated () {
                 return this.$store.getters.user !== null && this.$store.getters.user !== undefined
+            }
+        },
+        methods: {
+            onLogout() {
+                this.$store.dispatch('logout');
             }
         }
     };

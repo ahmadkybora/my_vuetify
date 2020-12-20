@@ -7,7 +7,7 @@ import Meetup from '../components/Meetup/Meetup.vue';
 import Profile from '../components/User/Profile.vue';
 import Signin from '../components/User/Signin.vue';
 import Signup from '../components/User/Signup.vue';
-
+import AuthGuard from './auth-guard.js';
 
 Vue.use(VueRouter);
 
@@ -25,7 +25,11 @@ const routes = [
   {
     path: '/meetup/new',
     name: 'CreateMeetup',
-    component: CreateMeetup
+    component: CreateMeetup,
+    /**
+     * this is for auth-guard
+     */
+    beforeEnter: AuthGuard,
   },
   {
     path: '/meetups/:id',
@@ -36,7 +40,11 @@ const routes = [
   {
     path: '/profile',
     name: 'Profile',
-    component: Profile
+    component: Profile,
+    /**
+     * this is for auth-guard
+     */
+    beforeEnter: AuthGuard,
   },
   {
     path: '/signup',
